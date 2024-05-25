@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cookbook-mysql-sts
+  namespace: cookbook
+spec:
+  serviceName: cookbook-mysql-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cookbook-mysql
+  template:
+    metadata:
+      labels:
+        app: cookbook-mysql
+    spec:
+      containers:
+        - name: mysql
+          image: 998898571931.dkr.ecr.us-east-1.amazonaws.com/vpbank-hackathon:mysql-v8.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+              name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cookbook-secret
+                  key: MYSQL_ROOT_PASSWORD
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          hostPath:
+            path: /db/mysql
+            type: DirectoryOrCreate
