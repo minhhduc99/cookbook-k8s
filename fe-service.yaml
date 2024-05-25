@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cookbook-fe-service
+  namespace: cookbook
+spec:
+  type: LoadBalancer
+  selector:
+    app: cookbook-fe
+  ports:
+    - port: 80
+      targetPort: 80
