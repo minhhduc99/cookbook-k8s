@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cookbook-fe-deployment
+  namespace: cookbook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cookbook-fe
+  template:
+    metadata:
+      labels:
+        app: cookbook-fe
+    spec:
+      containers:
+        - name: frontend
+          image: 998898571931.dkr.ecr.us-east-1.amazonaws.com/vpbank-hackathon:fe-v12
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
